@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
  */
 public class Tutorial {
 
-    public static final int ARRAY_SIZE = 10;
+    private static final int ARRAY_SIZE = 10;
 
     public static void main(String[] args) {
         System.out.println("Hello World");
@@ -36,22 +36,33 @@ public class Tutorial {
             }
         };
 
-        List<Integer> oddNumbersFrom1To10 = IntStream.range(0,10).filter(isOdd).boxed().collect(Collectors.toList());
+        List<Integer> oddNumbersFrom1To10 = IntStream.range(0,10)
+                .filter(isOdd)
+                .boxed()
+                .collect(Collectors.toList());
         System.out.println(oddNumbersFrom1To10);
 
         // With Java 8 lambdas, the above code snippet can be refactored to the following:
         IntPredicate isEven = (s)-> s % 2 == 0;
 
+        List<Integer> evenNumbersFrom1to10 = IntStream.range(0,10)
+                .filter((s) -> s % 2 == 0)
+                .boxed()
+                .collect(Collectors.toList());
+        System.out.println(oddNumbersFrom1To10);
+
         // Lambdas do support functions that are more then one expression like the following:
         IntPredicate isDivisibleByThree = (s) -> {
-            if(s % 3 == 0)
-                return true;
-            return false;
+//            if(s % 3 == 0)
+//                return true;
+//            return false;
+            return s % 3 == 0;
         };
 
 
         // you can also make streams into a a parallel.
-        OptionalInt sum = Arrays.stream(arr).parallel().filter(isEven).reduce((x, y)->x+y);
+        OptionalInt sum = Arrays.stream(arr).parallel()
+                .filter(isEven).reduce((x, y)->x+y);
         if(sum.isPresent()) {
             System.out.println("Sum: " + sum.getAsInt());
         }
@@ -68,13 +79,15 @@ public class Tutorial {
         // This means unless one of a few specific functions are called, Everything that is used to transform a stream
         // of objects is not evaluated. You can keep on chaining more and more and nothing will happen unless
         // one of the few terminal operations are called.
-        IntStream evenNumbers = Arrays.stream(arr).filter((s)-> s % 2 == 0);
+        IntStream evenNumbers = Arrays.stream(arr)
+                .filter((s)-> s % 2 == 0);
         evenNumbers.forEach(System.out::println); // evenNumbers pipeline will not be evaluated until forEach is called.
 
         System.out.println();
 
         // One can also call map on each element going from Stream -> Stream
-        List<Integer> doubled = IntStream.range(0,5).map((x)-> 2*x).boxed().collect(Collectors.toList());
+        List<Integer> doubled = IntStream.range(0,5).map((x)-> 2*x)
+                .boxed().collect(Collectors.toList());
         System.out.println(doubled);
     }
 }
